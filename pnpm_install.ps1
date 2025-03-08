@@ -23,19 +23,27 @@ if (-not (Test-Path -Path $RootDirectory -PathType Container)) {
     exit 1
 }
 
-# Convert to absolute paths
+# Convert root directory to absolute path
 $RootDirectory = Resolve-Path $RootDirectory
-$CacheDirectory = Join-Path $RootDirectory $CacheDirectory
+
+# Handle cache directory path
+if ([System.IO.Path]::IsPathRooted($CacheDirectory)) {
+    # If CacheDirectory is absolute path, use it as is
+    $CachePath = $CacheDirectory
+} else {
+    # If relative path, create it relative to current directory
+    $CachePath = Join-Path (Get-Location) $CacheDirectory
+}
 
 # Create cache directory if it doesn't exist
-if (-not (Test-Path -Path $CacheDirectory -PathType Container)) {
-    New-Item -ItemType Directory -Path $CacheDirectory | Out-Null
+if (-not (Test-Path -Path $CachePath -PathType Container)) {
+    New-Item -ItemType Directory -Path $CachePath | Out-Null
 }
 
 # Configure pnpm to use the cache directory
-$env:PNPM_HOME = $CacheDirectory
-pnpm config set store-dir "$CacheDirectory/store"
-pnpm config set global-dir "$CacheDirectory/global"
+$env:PNPM_HOME = $CachePath
+pnpm config set store-dir "$CachePath/store"
+pnpm config set global-dir "$CachePath/global"
 
 Write-Host "Searching for package.json files in: $RootDirectory" -ForegroundColor Cyan
 
@@ -78,4 +86,4 @@ foreach ($file in $packageFiles) {
 }
 
 Write-Host "`nCompleted processing all directories" -ForegroundColor Green
-Write-Host "Shared cache location: $CacheDirectory" -ForegroundColor Cyan
+Write-Host "Shared cache location: $CachePath" -ForegroundColor Cyan
