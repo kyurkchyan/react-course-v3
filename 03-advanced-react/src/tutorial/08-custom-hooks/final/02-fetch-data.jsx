@@ -1,6 +1,6 @@
-import useFetch from './useFetch';
+import useFetch from "./useFetch";
 
-const url = 'https://api.github.com/users/QuincyLarson';
+const url = "https://api.github.com/users/QuincyLarson";
 
 const FetchData = () => {
   const { isLoading, isError, data: user } = useFetch(url);
@@ -18,7 +18,7 @@ const FetchData = () => {
   return (
     <div>
       <img
-        style={{ width: '150px', borderRadius: '25px' }}
+        style={{ width: "150px", borderRadius: "25px" }}
         src={avatar_url}
         alt={name}
       />
