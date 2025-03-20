@@ -1,5 +1,5 @@
-// C:\Projects\Learning\React\react-course-v3\03-advanced-react\src\tutorial\08-custom-hooks\starter\01-toggle.jsx
-import Starter from "./tutorial/09-context-api/starter/NavBar";
+// C:\Projects\Learning\React\react-course-v3\03-advanced-react\src\tutorial\10-useReducer\starter\01-useReducer.jsx
+import Starter from "./tutorial/10-useReducer/starter/01-useReducer";
 
 function App() {
   return <Starter />;
