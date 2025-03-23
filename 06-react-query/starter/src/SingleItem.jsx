@@ -1,25 +1,32 @@
-const SingleItem = ({ item }) => {
+import { useDeleteTask, useToggleDone } from "./taskApi";
+
+const SingleItem = ({ task }) => {
+  const { deleteTask, isDeleting } = useDeleteTask();
+  const { toggleDone, isToggling } = useToggleDone();
+
   return (
-    <div className='single-item'>
+    <div className="single-item">
       <input
-        type='checkbox'
-        checked={item.isDone}
-        onChange={() => console.log('edit task')}
+        type="checkbox"
+        checked={task.isDone}
+        onChange={() => toggleDone(task.id, !task.isDone)}
+        disabled={isToggling}
       />
       <p
         style={{
-          textTransform: 'capitalize',
-          textDecoration: item.isDone && 'line-through',
+          textTransform: "capitalize",
+          textDecoration: task.isDone && "line-through",
         }}
       >
-        {item.title}
+        {task.title}
       </p>
       <button
-        className='btn remove-btn'
-        type='button'
-        onClick={() => console.log('delete task')}
+        className="btn remove-btn"
+        type="button"
+        onClick={() => deleteTask(task.id)}
+        disabled={isDeleting}
       >
-        delete
+        {isDeleting ? "deleting..." : "delete"}
       </button>
     </div>
   );
