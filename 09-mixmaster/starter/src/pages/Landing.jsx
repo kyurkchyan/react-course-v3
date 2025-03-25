@@ -16,7 +16,6 @@ const Landing = () => {
   const data = useLoaderData();
   return (
     <div>
-      <h3>{data.searchTerm}</h3>
       <SearchForm />
       <CocktailList drinks={data.drinks} />
     </div>

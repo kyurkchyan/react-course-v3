@@ -1,9 +1,8 @@
-import React from "react";
 import { useRouteError } from "react-router-dom";
-
+import GenericError from "../components/GenericError";
 const SinglePageError = () => {
   const error = useRouteError();
-  return <h2>{error.message}</h2>;
+  return <GenericError message={error.message} />;
 };
 
 export default SinglePageError;
