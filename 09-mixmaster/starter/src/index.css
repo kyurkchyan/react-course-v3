@@ -184,6 +184,11 @@ ul {
   width: 100%;
 }
 
+.btn:disabled {
+  background: var(--grey-400);
+  cursor: not-allowed;
+}
+
 /* alerts */
 .alert {
   padding: 0.375rem 0.75rem;
