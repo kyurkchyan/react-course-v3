@@ -4,33 +4,47 @@ import axios from "axios";
 import styled from "styled-components";
 import NotFound from "../components/NotFound";
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 const singleCocktailUrl =
   "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=";
 
-export const loader = async ({ params }) => {
-  const response = await axios.get(`${singleCocktailUrl}${params.id}`);
-  const drink = response.data.drinks ? response.data.drinks[0] : null;
-  if (!drink) {
-    return null;
-  }
-  const ingredients = [];
-  Object.keys(drink)
-    .filter((key) => key.startsWith("strIngredient") && drink[key])
-    .forEach((key) => {
-      ingredients.push(drink[key]);
-    });
-  const {
-    strDrink: name,
-    strDrinkThumb: image,
-    strAlcoholic: info,
-    strGlass: glass,
-    strInstructions: instructions,
-  } = drink;
-  return { name, image, info, glass, instructions, ingredients };
+const singleCocktailQuery = (id) => {
+  return {
+    queryKey: ["cocktail", id],
+    queryFn: async () => {
+      const response = await axios.get(`${singleCocktailUrl}${id}`);
+      const drink = response.data.drinks ? response.data.drinks[0] : null;
+      if (!drink) {
+        return null;
+      }
+      const ingredients = [];
+      Object.keys(drink)
+        .filter((key) => key.startsWith("strIngredient") && drink[key])
+        .forEach((key) => {
+          ingredients.push(drink[key]);
+        });
+      const {
+        strDrink: name,
+        strDrinkThumb: image,
+        strAlcoholic: info,
+        strGlass: glass,
+        strInstructions: instructions,
+      } = drink;
+      return { name, image, info, glass, instructions, ingredients };
+    },
+  };
 };
 
+export const loader =
+  (queryClient) =>
+  async ({ params }) => {
+    await queryClient.ensureQueryData(singleCocktailQuery(params.id));
+    return { id: params.id };
+  };
+
 const Cocktail = () => {
-  const data = useLoaderData();
+  const { id } = useLoaderData();
+  const { data } = useQuery(singleCocktailQuery(id));
   if (!data) {
     return <NotFound message="No cocktail found" />;
   }

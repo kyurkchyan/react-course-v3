@@ -4,7 +4,7 @@ import { Form, useNavigation } from "react-router-dom";
 const SearchForm = ({ searchTerm }) => {
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
-  
+
   return (
     <Wrapper>
       <Form className="form" method="GET">
